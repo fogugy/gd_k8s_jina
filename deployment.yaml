@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+
+spec:
+  selector:
+    app: jina
+  ports:
+    - protocol: "TCP"
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jina
+
+spec:
+  selector:
+    matchLabels:
+      app: jina
+  replicas: 1
+
+  template:
+    metadata:
+      labels:
+        app: jina
+
+    spec:
+      volumes:
+        - name: volume-flask
+          hostPath:
+            path: /workdir/flask_app
+            type: Directory
+        - name: volume-jina
+          hostPath:
+            path: /workdir/jina_app
+            type: Directory
+
+      containers:
+        - name: flask
+          image: flask-app:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SERVICE_PORT
+              value: '5000'
+            - name: JINA__PORT_EXPOSE
+              value: '6000'
+          volumeMounts:
+            - mountPath: /app
+              name: volume-flask
+
+        - name: jina-index
+          image: jinaai/jina:master-py38-devel
+          imagePullPolicy: Never
+          env:
+            - name: JINA__PORT_EXPOSE
+              value: '6000'
+          ports:
+            - containerPort: 6000
+          command:
+            - python
+            - '/app/app.py'
+          volumeMounts:
+            - mountPath: /app
+              name: volume-jina

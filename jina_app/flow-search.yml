@@ -1,0 +1,38 @@
+jtype: Flow
+version: '1'
+with:
+  workspace: $HW_WORKDIR
+  port_expose: $JINA_PORT
+  rest_api: true
+  py_modules:
+    - my_executors.py
+executors:
+#  - name: encodeText
+#    uses:
+#      jtype: TextEncoder
+#  - name: textChunkIndexer
+#    uses:
+#      jtype: DocVectorIndexer
+#      with:
+#        index_file_name: "text.json"
+  - name: craftImage
+    uses:
+      jtype: ImageCrafter
+    needs: gateway
+  - name: encodeImage
+    uses:
+      jtype: ImageEncoder
+  - name: imageChunkIndexer
+    uses:
+      jtype: DocVectorIndexer
+      with:
+        index_file_name: "image.json"
+  - name: weightedRanker
+    uses:
+      jtype: WeightedRanker
+    needs: [ imageChunkIndexer ]
+#    needs: [ textChunkIndexer, imageChunkIndexer ]
+  - name: keyvalueIndexer
+    uses:
+      jtype: KeyValueIndexer
+    needs: weightedRanker

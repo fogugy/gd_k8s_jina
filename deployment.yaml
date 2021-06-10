@@ -48,24 +48,41 @@ spec:
             - containerPort: 5000
           env:
             - name: SERVICE_PORT
-              value: '5000'
-            - name: JINA__PORT_EXPOSE
-              value: '6000'
+              value: "5000"
+            - name: JINA_PORT
+              value: "6000"
           volumeMounts:
             - mountPath: /app
               name: volume-flask
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
 
-        - name: jina-index
-          image: jinaai/jina:master-py38-devel
+        - name: jina
+          image: jina-app:latest
           imagePullPolicy: Never
           env:
-            - name: JINA__PORT_EXPOSE
-              value: '6000'
+            - name: JINA_PORT
+              value: "6000"
           ports:
             - containerPort: 6000
-          command:
-            - python
-            - '/app/app.py'
+          # command:
+          #   - python
+          #   - "/app/app_test.py"
+          # command:
+          #   - sh
+          #   - "/app/run.sh"
           volumeMounts:
             - mountPath: /app
               name: volume-jina
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1400m"

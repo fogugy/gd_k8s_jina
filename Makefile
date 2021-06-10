@@ -1,10 +1,18 @@
-dclear:
-	docker stop flask-app && docker container rm flask-app
+clear-flask:
+	docker image rm flask-app
 
-dbuild:
+clear-jina:
+	docker image rm jina-app
+
+build-flask:
 	cd flask_app &&\
-		docker build -t flask-app:latest -f ./flask-service.dockerfile . &&\
-		cd ..
+	docker build -t flask-app:latest -f ./flask-service.dockerfile . &&\
+	cd ..
+
+build-jina:
+	cd jina_app &&\
+	docker build -t jina-app:latest -f ./jina.dockerfile . &&\
+	cd ..
 
 run:
 	docker run -p 5000:5000 flask-app
@@ -17,5 +25,8 @@ run-kube:
 
 minikube-run:
 	minikube start --vm-driver=hyperkit &&\
-		eval $(minikube docker-env) &&\
-		minikube mount ./:/workdir
+	minikube mount ./:/workdir
+
+
+# 	minikube start --vm-driver=hyperkit &&\
+#	minikube start --driver=docker &&\

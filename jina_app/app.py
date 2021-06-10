@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     args = set_hw_multimodal_parser().parse_args()
     args.workdir = os.environ['HW_WORKDIR']
-    prep(args)
-    index(args)
+    # prep(args)
+    # index(args)
     # search_ui()
     search()

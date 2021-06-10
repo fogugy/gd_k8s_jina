@@ -24,7 +24,7 @@ def hello():
     }
 
     payload = 'Payload stub'
-    return render_template('index.html',
+    return render_template('index2.html',
                            text='Multimodal neural search',
                            item=item,
                            payload=payload)

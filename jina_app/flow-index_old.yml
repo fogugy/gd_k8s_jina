@@ -2,11 +2,12 @@ jtype: Flow
 version: '1'
 with:
   workspace: $HW_WORKDIR
-  port_expose: $JINA_PORT
-  rest_api: true
   py_modules:
     - my_executors.py
 executors:
+  - name: segment
+    uses:
+      jtype: Segmenter
   - name: encodeText
     uses:
       jtype: TextEncoder
@@ -18,7 +19,7 @@ executors:
   - name: craftImage
     uses:
       jtype: ImageCrafter
-    needs: gateway
+    needs: segment
   - name: encodeImage
     uses:
       jtype: ImageEncoder
@@ -27,11 +28,10 @@ executors:
       jtype: DocVectorIndexer
       with:
         index_file_name: "image.json"
-  - name: weightedRanker
-    uses:
-      jtype: WeightedRanker
-    needs: [ textChunkIndexer, imageChunkIndexer ]
-  - name: keyvalueIndexer
+  - name: keyValueIndexer
     uses:
       jtype: KeyValueIndexer
-    needs: weightedRanker
+    needs: segment
+  - name: joinAll
+#    needs: [ imageChunkIndexer, keyValueIndexer ]
+    needs: [ textChunkIndexer, imageChunkIndexer, keyValueIndexer ]

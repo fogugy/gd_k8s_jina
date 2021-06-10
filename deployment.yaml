@@ -70,19 +70,11 @@ spec:
               value: "6000"
           ports:
             - containerPort: 6000
-          # command:
-          #   - python
-          #   - "/app/app_test.py"
-          # command:
-          #   - sh
-          #   - "/app/run.sh"
           volumeMounts:
             - mountPath: /app
               name: volume-jina
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
               memory: "1024Mi"
-              cpu: "1400m"
+            limits:
+              memory: "2500Mi"

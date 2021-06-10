@@ -8,14 +8,14 @@ executors:
   - name: segment
     uses:
       jtype: Segmenter
-#  - name: encodeText
-#    uses:
-#      jtype: TextEncoder
-#  - name: textChunkIndexer
-#    uses:
-#      jtype: DocVectorIndexer
-#      with:
-#        index_file_name: "text.json"
+  - name: encodeText
+    uses:
+      jtype: TextEncoder
+  - name: textChunkIndexer
+    uses:
+      jtype: DocVectorIndexer
+      with:
+        index_file_name: "text.json"
   - name: craftImage
     uses:
       jtype: ImageCrafter
@@ -33,5 +33,4 @@ executors:
       jtype: KeyValueIndexer
     needs: segment
   - name: joinAll
-    needs: [ imageChunkIndexer, keyValueIndexer ]
-#    needs: [ textChunkIndexer, imageChunkIndexer, keyValueIndexer ]
+    needs: [ textChunkIndexer, imageChunkIndexer, keyValueIndexer ]

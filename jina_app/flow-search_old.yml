@@ -30,6 +30,7 @@ executors:
   - name: weightedRanker
     uses:
       jtype: WeightedRanker
+#    needs: [ imageChunkIndexer ]
     needs: [ textChunkIndexer, imageChunkIndexer ]
   - name: keyvalueIndexer
     uses:

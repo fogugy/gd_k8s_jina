@@ -15,11 +15,11 @@
             <a class="navbar-brand" href="#">
                 <img src="https://api.jina.ai/logo/logo-product/jina-core/logo-only/colored/Product%20logo_Core_Colorful%401x.png"
                      width="32px" class="d-inline-block align-top">
-                {{ text }}
+                Jina Multimodal Hello-World
             </a>
             <form class="form-inline my-2 my-lg-0">
                 <input v-model="serverAddress" class="form-control mr-sm-2" type="search" placeholder="server address"
-                       aria-label="Search" disabled hidden>
+                       aria-label="Search">
             </form>
         </div>
     </nav>
@@ -63,7 +63,7 @@
                 <div class="card-body">
                     <pre>
                         <code>
-{{payload}}
+                            {{payload}}
                         </code>
                     </pre>
                 </div>
@@ -75,7 +75,7 @@
                     <img :src="item.uri" class="card-img-top"
                          style="max-height: 200px; object-fit: contain;">
                     <div class="card-body">
-                        {{item.tags.caption}}
+                        {{ item.tags.caption }}
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">score: {{item.score.value}}</li>
@@ -99,12 +99,14 @@
             return v.toString(16);
         });
     }
-    
+    const urlParams = new URLSearchParams(window.location.search);
+    const port = urlParams.get('port') ?? 8080;
+
     var app = new Vue({
         el: '#app',
         data: {
             modalWeight: 50,
-            query: null,
+            query: {},
             results: [],
             serverAddress: window.location.origin
         },

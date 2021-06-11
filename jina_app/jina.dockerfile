@@ -2,7 +2,7 @@ FROM python:3.8.8-slim-buster
 
 WORKDIR /app
 
-COPY . app.py /app/
+COPY ./* /app/
 
 RUN apt-get update && apt-get install curl -y
 
@@ -14,6 +14,6 @@ ENV HW_WORKDIR workdir
 
 EXPOSE 6000
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "/app/app.py" ]
+#ENTRYPOINT [ "python" ]
+#
+#CMD [ "/app/app.py", "-" ]

@@ -1,15 +1,11 @@
 import os
 import urllib.request
-import webbrowser
 import zipfile
 from pathlib import Path
 
-from jina import Flow
 from jina.importer import ImportExtensions
-from jina.logging.predefined import default_logger
 from jina.logging.profile import ProgressBar
 from jina.parsers.helloworld import set_hw_multimodal_parser
-from jina.types.document.generators import from_csv
 
 
 def prep(args):
@@ -42,40 +38,6 @@ def prep(args):
         fp.extractall(args.workdir)
 
 
-def index(args):
-    f = Flow.load_config('flow-index.yml')
-
-    with f, open(f'{args.workdir}/people-img/meta.csv', newline='') as fp:
-        f.index(inputs=from_csv(fp), request_size=10)
-
-
-def search_ui():
-    f = Flow.load_config('flow-search.yml')
-
-    url_html_path = 'file://' + os.path.abspath(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static/index.html')
-    )
-    with f:
-        try:
-            webbrowser.open(url_html_path, new=2)
-        except:
-            pass  # intentional pass, browser support isn't cross-platform
-        finally:
-            default_logger.success(
-                f'You should see a demo page opened in your browser, '
-                f'if not, you may open {url_html_path} manually'
-            )
-        if not args.unblock_query_flow:
-            f.block()
-
-
-def search():
-    f = Flow.load_config('flow-search.yml')
-
-    with f:
-        f.block()
-
-
 def download_data(targets, download_proxy=None, task_name='download fashion-mnist'):
     """
     Download data.
@@ -101,11 +63,7 @@ def download_data(targets, download_proxy=None, task_name='download fashion-mnis
 
 
 if __name__ == '__main__':
-    print(os.environ['JINA_PORT'], os.environ['HW_WORKDIR'])
-
     args = set_hw_multimodal_parser().parse_args()
     args.workdir = os.environ['HW_WORKDIR']
-    # prep(args)
-    # index(args)
-    # search_ui()
-    search()
+
+    prep(args)

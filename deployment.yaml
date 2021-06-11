@@ -54,6 +54,7 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: volume-flask
+          command: ['python', 'app.py']
           resources:
             requests:
               memory: "64Mi"
@@ -73,6 +74,7 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: volume-jina
+          command: ['python', 'app.py', 'search']
           resources:
             requests:
               memory: "1024Mi"

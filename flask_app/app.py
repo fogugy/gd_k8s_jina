@@ -24,7 +24,7 @@ def hello():
     }
 
     payload = 'Payload stub'
-    return render_template('index2.html',
+    return render_template('index.html',
                            text='Multimodal neural search',
                            item=item,
                            payload=payload)
@@ -44,7 +44,23 @@ def search():
 
 @app.route('/ping', methods=['GET'])
 def ping():
-    return Response('pong', status=200)
+    return Response('pong\n', status=200)
+
+
+@app.route('/ping_jina', methods=['POST'])
+def ping_jina():
+    r_jina = requests.get(f'http://0.0.0.0:{JINA_PORT}/search')
+    r = Response(
+        r_jina.text,
+        status=r_jina.status_code,
+        content_type=r_jina.headers['content-type']
+    )
+    return r
+
+
+@app.route('/test_jina_search', methods=['POST'])
+def test_jina_search():
+    pass
 
 
 if __name__ == '__main__':

@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  flask:
+    image: flask-app
+    container_name: flask-service
+    ports:
+      - 5000:5000
+    volumes:
+      - /workdir/flask_app:/app
+    restart: always
+    environment:
+      SERVICE_PORT: 5000
+      JINA_PORT: 6000
+    working_dir: /app
+    command: python app.py
+
+  jina:
+    image: jina-app
+    container_name: jina
+    ports:
+      - 6000:6000
+    volumes:
+      - /workdir/jina_app:/app
+    links:
+      - flask
+    restart: always
+    environment:
+      JINA_PORT: 6000
+      HW_WORKDIR: workdir
+    working_dir: /app
+    stdin_open: true
+    tty: true
